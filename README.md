@@ -1,7 +1,5 @@
 # TouchGreen Mobile Application
 
-[Previous content remains unchanged...]
-
 ## Development Environment Setup
 
 ### Prerequisites
@@ -90,5 +88,3 @@ Common issues and solutions:
    - Clear solution cache: `dotnet clean`
    - Restore packages: `dotnet restore`
    - Rebuild solution: `dotnet build`
-
-[Previous content remains unchanged...]
