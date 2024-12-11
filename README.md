@@ -1,185 +1,90 @@
 # TouchGreen Mobile Application
 
-## Project Overview
-TouchGreen is a gamified mobile application designed to help users monitor and reduce their carbon footprint through interactive challenges and a virtual ecosystem. The app combines real-world sustainability actions with virtual game elements to create an engaging experience for environmental consciousness.
+## Development Environment Setup
 
-## Technology Stack
-- **.NET MAUI**: Cross-platform framework for mobile and desktop applications
-- **C#**: Primary programming language
-- **MVVM Architecture**: Design pattern for clear separation of concerns
-- **Unity**: Game engine for the virtual ecosystem component
-- Additional stack components will be updated as the backend architecture is defined
+### Prerequisites
+- Visual Studio 2022 17.8 or later (Windows) or Visual Studio for Mac 17.6 or later
+- .NET 8.0 SDK
+- Unity 2023.1 or later
+- Git 2.40 or later
+- Node.js 18.0 or later (for development tools)
 
-## Project Structure and Naming Conventions
+### First-Time Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Aesseus/TouchGreen.git
+   cd TouchGreen
+   ```
 
-### Solution Structure
-```
-TouchGreen.sln
-├── TouchGreen.Core/               # Core business logic and models
-├── TouchGreen.Services/           # Service implementations
-├── TouchGreen.ViewModels/         # MVVM ViewModels
-├── TouchGreen.Views/              # MAUI Views
-├── TouchGreen.Game/               # Unity game integration
-└── TouchGreen.Tests/              # Unit and integration tests
-```
+2. Install required .NET tools:
+   ```bash
+   dotnet tool install -g dotnet-ef
+   dotnet tool install -g dotnet-format
+   ```
 
-### Naming Conventions
+3. Install NuGet packages:
+   ```bash
+   dotnet restore
+   ```
 
-#### General Rules
-- Use PascalCase for class names, public properties, and methods
-- Use camelCase for private fields and local variables
-- Use UPPERCASE for constants
-- Prefix interfaces with 'I'
-- Avoid abbreviations in names
-- Use meaningful and descriptive names
+4. Set up Unity integration:
+   - Open Unity Hub
+   - Add the TouchGreen.Game project
+   - Install required Unity packages through Package Manager
+   - Configure Unity project settings for your platform
 
-#### Examples
-```csharp
-public class UserProfileViewModel    // Class names in PascalCase
-{
-    private readonly IUserService _userService;    // Private fields with underscore prefix
-    
-    public string FirstName { get; set; }         // Public properties in PascalCase
-    
-    private void calculateFootprint() { }         // Private methods in camelCase
-    
-    public async Task UpdateProfileAsync() { }    // Public methods in PascalCase
-}
-```
+### Local Development Configuration
+1. Environment Variables:
+   Create a `local.settings.json` file in the project root:
+   ```json
+   {
+     "LocalDevelopment": {
+       "ApiBaseUrl": "http://localhost:5000",
+       "EnableDebugFeatures": true,
+       "UnityProjectPath": "./TouchGreen.Game"
+     }
+   }
+   ```
 
-## MVVM Implementation Guidelines
+2. Unity Configuration:
+   - Set up Unity Editor preferences
+   - Configure scene loading
+   - Set up debugging preferences
 
-### MVVM Community Toolkit Integration
-We use the .NET Community Toolkit MVVM package for implementing the MVVM pattern. This provides a robust and efficient way to handle property changes, commands, and messaging.
+### Development Workflow
+1. Before starting new work:
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b feature/your-feature-name
+   ```
 
-```xml
-<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-```
+2. During development:
+   - Write tests for new features
+   - Follow the coding standards in this document
+   - Keep commits focused and well-documented
+   - Regular builds and local testing
 
-### View Models
-- All ViewModels should inherit from `ObservableObject`
-- Use source generators with attributes for property and command generation
-- Implement observable properties using `[ObservableProperty]` attribute
-- Use `[RelayCommand]` for commands
-- Avoid code-behind in views
+3. Code Quality Checks:
+   ```bash
+   dotnet format
+   dotnet test
+   ```
 
-Example ViewModel:
-```csharp
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+4. Preparing for Pull Request:
+   - Update documentation if needed
+   - Ensure all tests pass
+   - Review changes for coding standards compliance
+   - Create detailed PR description
 
-namespace TouchGreen.ViewModels;
+### Troubleshooting
+Common issues and solutions:
+1. Unity-MAUI Integration Issues:
+   - Verify Unity project settings
+   - Check build configurations
+   - Validate platform-specific settings
 
-public partial class UserProfileViewModel : ObservableObject
-{
-    [ObservableProperty]
-    private string firstName;
-
-    [ObservableProperty]
-    private string lastName;
-
-    [ObservableProperty]
-    private double carbonFootprint;
-
-    [RelayCommand]
-    private async Task UpdateProfileAsync()
-    {
-        try
-        {
-            // Implementation
-        }
-        catch (Exception ex)
-        {
-            // Error handling
-        }
-    }
-}
-```
-
-### Services
-- Use dependency injection
-- Interface-based design
-- Implement service registration in `MauiProgram.cs`
-
-```csharp
-public static class MauiProgram
-{
-    public static MauiApp CreateMauiApp()
-    {
-        var builder = MauiApp.CreateBuilder();
-        
-        // Register services
-        builder.Services.AddSingleton<IUserService, UserService>();
-        builder.Services.AddSingleton<ICarbonCalculatorService, CarbonCalculatorService>();
-        
-        // Register views and viewmodels
-        builder.Services.AddTransient<UserProfilePage>();
-        builder.Services.AddTransient<UserProfileViewModel>();
-        
-        return builder.Build();
-    }
-}
-```
-
-## Git Workflow
-
-### Branch Naming Convention
-- Feature branches: `feature/description`
-- Bug fixes: `bugfix/description`
-- Releases: `release/version`
-- Hotfixes: `hotfix/description`
-
-### Commit Message Format
-```
-<type>(<scope>): <description>
-
-[optional body]
-
-[optional footer]
-```
-
-Types:
-- feat: New feature
-- fix: Bug fix
-- docs: Documentation changes
-- style: Code style changes
-- refactor: Code refactoring
-- test: Adding tests
-- chore: Maintenance
-
-Example:
-```
-feat(profile): add carbon footprint calculator
-
-- Implements daily emission tracking
-- Adds visualization component
-- Integrates with game rewards system
-
-Resolves: #123
-```
-
-### Pull Request Process
-1. Create feature branch from `develop`
-2. Implement changes
-3. Submit PR to `develop`
-4. Require at least one code review
-5. Pass all automated tests
-6. Merge using squash and merge strategy
-
-## Code Quality Standards
-- Use nullable reference types
-- Implement unit tests for business logic
-- Maintain test coverage above 80%
-- Follow SOLID principles
-- Use async/await for asynchronous operations
-- Implement proper exception handling
-- Use logging for debugging and monitoring
-
-## Documentation
-- XML documentation for public APIs
-- Keep README updated
-- Document architectural decisions
-- Include inline comments for complex logic
-
----
-*Note: This README will be updated with additional sections for backend architecture and infrastructure as they are defined.*
+2. Build Problems:
+   - Clear solution cache: `dotnet clean`
+   - Restore packages: `dotnet restore`
+   - Rebuild solution: `dotnet build`
